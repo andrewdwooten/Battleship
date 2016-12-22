@@ -10,4 +10,4 @@ class Ship
 	def submarine
 		['s','s','s']
 	end
-end
+end 

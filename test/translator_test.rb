@@ -30,4 +30,4 @@ class TranslatorTest < MiniTest::Test
 		assert 0, Translator.pos_1
 		assert_equal nil, Translator.pos_2
 	end
-end
+end 

@@ -4,9 +4,9 @@ require './lib/board.rb'
 class BoardTest < MiniTest::Test
 attr_reader :board
 
-def setup
-	@board = Board.new
-end
+	def setup
+		@board = Board.new
+	end
 
 	def test_is_the_player_board_an_array
 		assert_equal Array, board.player_board.class
@@ -32,5 +32,4 @@ end
 		refute board.player_board.eql?(board.display_board)
 		refute board.computer_board.eql?(board.display_board)
 	end
-
 end

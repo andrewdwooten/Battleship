@@ -53,5 +53,5 @@ include Message
 			end
 			@win
 		end	
-end		
+end
 

@@ -58,4 +58,4 @@ module Message
 	def self.win
 		"YOU'RE A WINNER!!  DOESN'T THAT FEEL GREAT?!"
 	end
-end
+end 

@@ -1,6 +1,7 @@
 class Timer
   require 'time'
   attr_reader :elapsed, :end_time
+	
 	def initialize
 	end
 

@@ -72,4 +72,4 @@ class MessageTest < MiniTest::Test
 		assert win.start_with?("YOU'RE")
 		assert win.end_with?("GREAT?!")
 	end
-end
+end 

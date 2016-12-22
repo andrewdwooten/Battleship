@@ -26,7 +26,7 @@ module Translator
 	def self.pos_4
 		@pos_4 = @output[3]
 	end
-end
+end  
 
 
 

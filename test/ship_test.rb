@@ -4,11 +4,11 @@ require './lib/ship.rb'
 class ShipTest < MiniTest::Test
 attr_reader :ship, :destroyer, :submarine
 
-def setup
-  @ship = Ship.new
-  @destroyer = ship.destroyer
-  @submarine = ship.submarine
-end
+  def setup
+    @ship = Ship.new
+    @destroyer = ship.destroyer
+    @submarine = ship.submarine
+  end
 
   def test_destroyer_is_an_array
     assert_equal Array, ship.destroyer.class

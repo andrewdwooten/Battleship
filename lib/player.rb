@@ -80,6 +80,6 @@ class Player
 			@win = true
 		end
 	end
-end
+end 
 
 			

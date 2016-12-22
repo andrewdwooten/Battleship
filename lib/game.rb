@@ -106,5 +106,5 @@ include Translator
 		puts "You played this long: #{@timer.elapsed} seconds"
 		puts "You fired #{@shot_counter} shots!"
 	end
-end
+end 
     

@@ -53,6 +53,4 @@ end
     mac.place_ships(mac_board, ship.destroyer)
     refute mac.win?(mac_board)
   end
-
-
 end

@@ -95,5 +95,4 @@ end
 			me.place_ship_1(mac_board, "A1 B1")
 			assert String, me.win?(mac_board).class
 		end		
-			
 end
