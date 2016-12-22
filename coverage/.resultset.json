@@ -1,0 +1,41 @@
+{
+  "Unit Tests": {
+    "coverage": {
+      "/Users/andrewwooten/Desktop/Turing/Module_1/projects/Battleship/lib/translator.rb": [
+        1,
+        1,
+        null,
+        1,
+        4,
+        4,
+        4,
+        4,
+        4,
+        11,
+        4,
+        null,
+        null,
+        1,
+        2,
+        null,
+        null,
+        1,
+        2,
+        null,
+        null,
+        1,
+        1,
+        null,
+        null,
+        1,
+        1,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "timestamp": 1482408942
+  }
+}
