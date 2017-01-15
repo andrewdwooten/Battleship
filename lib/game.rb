@@ -107,4 +107,7 @@ include Translator
 		puts "You fired #{@shot_counter} shots!"
 	end
 end 
+
+a = Game.new
+a.startup
     
