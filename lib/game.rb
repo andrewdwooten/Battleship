@@ -6,7 +6,6 @@ require_relative 'timer.rb'
 require_relative 'translator.rb'
 require_relative 'player.rb'
 require_relative 'cli.rb'
-require 'pry'
 
 class Game
 include Message
