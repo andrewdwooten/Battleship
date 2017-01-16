@@ -48,7 +48,7 @@ class Player
 					board[pos_3][pos_4] = 's'
 					middle_space(board, pos_1, pos_2, pos_3, pos_4)
 		else
-			Message.invalid_placement
+			puts Message.invalid_placement
 		end
 	end
 

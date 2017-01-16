@@ -3,12 +3,13 @@ require './lib/player.rb'
 
 
 class PlayerTest < MiniTest::Test
-	attr_reader :me, :board, :player_board
+	attr_reader :me, :board, :player_board, :mac_board
 
 def setup
   @me = Player.new
 	@board = Board.new
 	@player_board = board.player_board
+	@mac_board = board.computer_board
 end
 
     def test_player_can_place_destoyer
@@ -41,20 +42,6 @@ end
 			assert 5, player_board.bsearch {|e| e != '0'}
 			assert 3, player_board.bsearch {|e| e == 's'}
 			assert 2, player_board.bsearch {|e| e == 'd'}
-		end
-
-		def test_player_cannot_enter_invalid_coordinates
-			assert String, [me.place_ship_1(player_board,"asdf A5")].class
-		end
-
-		def test_player_cannot_enter_coordinates_that_are_too_far_apart
-			assert String, me.place_ship_1(player_board, "A1 A4").class
-			assert String, me.place_ship_2(player_board, "A1 D1").class
-		end
-
-		def test_player_cannot_place_ships_diagonally_on_board
-			assert String, me.place_ship_1(player_board, "A1 A2")
-			assert String, me.place_ship_2(player_board, "A1 C3")
 		end
 
 		def test_player_can_place_ships_vertically
@@ -94,5 +81,87 @@ end
 			mac_board = board.computer_board
 			me.place_ship_1(mac_board, "A1 B1")
 			assert String, me.win?(mac_board).class
-		end		
+		end
+
+		def test_check_row_and_column_returns_appropriate_boolean
+			assert me.check_row_and_column?(0,0,0,1)
+			refute me.check_row_and_column?(4,2,2,3)
+		end
+
+		def test_check_destroyer_continuity_returns_appropriate_boolean
+			assert me.check_destroyer_continuity?(0,0,0,1)
+			refute me.check_destroyer_continuity?(2,3,4,1)
+		end
+
+		def test_check_destroyer_path_returns_appropriate_boolean
+			me.place_ship_1(player_board, 'A1 A2')
+			refute me.check_destroyer_path?(player_board,0,0,0,1)
+			assert me.check_destroyer_path?(player_board,1,0,1,1)
+		end
+
+		def test_check_destroyer_placement_returns_appropriate_boolean
+			me.place_ship_1(player_board, 'A1 A2')
+			refute me.check_destroyer_placement?(player_board, 0,0,0,1)
+			assert me.check_destroyer_placement?(player_board,1,0,1,1)
+		end
+
+		def test_check_submarine_continuity_returns_appropriate_boolean
+			assert me.check_submarine_continuity?(0,0,0,2)
+			refute me.check_submarine_continuity?(0,0,0,4)
+		end
+
+		def test_check_submarine_path_returns_appropriate_boolean
+			me.place_ship_1(player_board, 'A1 A2')
+			refute me.check_submarine_path?(player_board,0,0,0,2)
+			assert me.check_submarine_path?(player_board,1,0,1,2)
+		end
+
+		def test_check_submarine_placement_returns_appropriate_boolean
+			me.place_ship_1(player_board, 'A1 A2')
+			refute me.check_submarine_placement?(player_board,0,0,0,2)
+			refute me.check_submarine_placement?(player_board,0,1,1,4)
+			refute me.check_submarine_placement?(player_board,0,3, 1,4)
+			assert me.check_submarine_placement?(player_board,0,3,2,3)
+		end
+
+		def test_check_hit_returns_appropriate_boolean
+			me.place_ship_1(player_board, 'A1 A2')
+			assert me.check_hit?(player_board, 0,0)
+			refute me.check_hit?(player_board, 3,2)
+		end
+
+		def test_bang_changes_board_and_value_of_hit
+			refute me.hit
+			me.place_ship_1(player_board, 'A1 A2')
+			me.bang(player_board, 0,0)
+			assert 0, player_board[0][0]
+			assert 'd', player_board[0][1]
+			assert me.hit
+		end
+
+		def test_miss_changes_value_of_hit
+			refute me.hit
+			me.place_ship_1(player_board, 'A1 A2')
+			me.bang(player_board, 0,0)
+			assert me.hit
+			me.miss
+			refute me.hit
+		end
+
+		def test_check_board_returns_appropriate_boolean
+			me.place_ship_1(player_board, 'A1 A2')
+			assert me.check_board?(player_board)
+			refute me.check_board?(mac_board)
+		end
+
+		def test_win_method_changes_win_value
+			me.place_ship_1(player_board, 'A1 A2')
+			me.win?(player_board)
+			refute me.win
+			me.win?(mac_board)
+			assert me.win
+		end
+
+
+
 end
