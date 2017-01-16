@@ -12,14 +12,14 @@ include Message
 include CLI
 include Translator
 
-	attr_reader 	:board,
-								:player,
-								:ship,
-								:mac,
-								:timer,
-								:mac_board,
-								:player_board,
-								:shot_counter
+attr_reader 	:board,
+							:player,
+							:ship,
+							:mac,
+							:timer,
+							:mac_board,
+							:player_board,
+							:shot_counter
 							
 
 	def initialize

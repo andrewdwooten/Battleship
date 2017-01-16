@@ -41,20 +41,24 @@ class Player
 		check_destroyer_path?(board, pos_1, pos_2, pos_3, pos_4)
 	end
 
-	def place_ship_2(board, coordinates)
-		translate(coordinates)
+	def place_ship_2(board, input)
+		translate(input)
 		if check_submarine_placement?(board, pos_1, pos_2, pos_3, pos_4) 
 					board[pos_1][pos_2] = 's'
 					board[pos_3][pos_4] = 's'
-				case
-				when (pos_1 + 2) == pos_3
-							board[pos_1 + 1][pos_2] = 's'
-				when (pos_2 + 2) == pos_4
-					board[pos_1][pos_2 + 1] = 's'
-				end
+					middle_space(board, pos_1, pos_2, pos_3, pos_4)
 		else
 			Message.invalid_placement
 		end
+	end
+
+	def middle_space(board, pos_1, pos_2, pos_3, pos_4)
+		case
+			when (pos_1 + 2) == pos_3
+				board[pos_1 + 1][pos_2] = 's'
+			when (pos_2 + 2) == pos_4
+				board[pos_1][pos_2 + 1] = 's'
+			end
 	end
 
 	def check_submarine_continuity?(pos_1, pos_2, pos_3, pos_4)
