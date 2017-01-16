@@ -57,44 +57,53 @@ class Player
 		end
 	end
 
-		def check_submarine_continuity?(pos_1, pos_2, pos_3, pos_4)
-			(pos_1 + 2) == pos_3 || (pos_2 + 2 ) == pos_4
-		end
+	def check_submarine_continuity?(pos_1, pos_2, pos_3, pos_4)
+		(pos_1 + 2) == pos_3 || (pos_2 + 2 ) == pos_4
+	end
 
-		def check_submarine_path?(board, pos_1, pos_2, pos_3, pos_4)
-			case
-				when (pos_1 + 2) == pos_3
-					board[pos_1 + 1][pos_2] == '0'
-				when (pos_2 + 2) == pos_4
-					board[pos_1][pos_2 + 1] == '0'
-			end
+	def check_submarine_path?(board, pos_1, pos_2, pos_3, pos_4)
+		case
+			when (pos_1 + 2) == pos_3
+				board[pos_1 + 1][pos_2] == '0'
+			when (pos_2 + 2) == pos_4
+				board[pos_1][pos_2 + 1] == '0'
 		end
+	end
 
-		def check_submarine_placement?(board, pos_1, pos_2, pos_3, pos_4)
-			check_row_and_column?(pos_1, pos_2, pos_3, pos_4) &&
-			check_submarine_continuity?(pos_1, pos_2, pos_3, pos_4) &&
-			check_submarine_path?(board, pos_1, pos_2, pos_3, pos_4)
-		end
+	def check_submarine_placement?(board, pos_1, pos_2, pos_3, pos_4)
+		check_row_and_column?(pos_1, pos_2, pos_3, pos_4) &&
+		check_submarine_continuity?(pos_1, pos_2, pos_3, pos_4) &&
+		check_submarine_path?(board, pos_1, pos_2, pos_3, pos_4)
+	end
 
 	def shoot(board, input)
 		translate(input)
-		if board[pos_1][pos_2] != '0'
-			 	board[pos_1][pos_2] = '0'
-			 	puts Message.hit
-				@hit = true
-		else
-			 puts Message.miss
-			 @hit = false
-		end
+		check_hit?(board,pos_1,pos_2) ? bang(board, pos_1, pos_2) : miss
+	end
+
+	def check_hit?(board,pos_1,pos_2)
+		board[pos_1][pos_2] != '0'
+	end
+
+	def bang(board,pos_1,pos_2)
+		board[pos_1][pos_2] = '0'
+		puts Message.hit
+		@hit = true
+	end
+			
+	def miss
+		puts Message.miss
+		@hit = false
 	end
 
 	def win?(board)
-		if board.flatten.include?("d") || board.flatten.include?("s")
-			@win = false
-		else
-			@win = true
-		end
+		check_board?(board) ? (@win=false) : (@win=true)
 	end
+
+	def check_board?(board)
+	 board.flatten.include?("d") || board.flatten.include?("s")
+	end
+
 end 
 
 			
