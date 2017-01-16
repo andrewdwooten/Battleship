@@ -1,23 +1,23 @@
 require_relative 'messages.rb'
 
 module CLI
-	attr_accessor :input
-
-	def input
-		@input = gets.chomp
-	end
 
 	def self.play?(input)
-		input == 'p'
+		input.downcase == 'p'
 	end
 
 	def self.quit?(input)
-		input == 'q'
+		input.downcase == 'q'
 	end
 
 	def self.instructions?(input)
-		input == 'i'
+		input.downcase == 'i'
 	end
+
+	def self.invalid?(input)
+		input != 'p' && input != 'q'
+	end
+		
 end
 
 	
