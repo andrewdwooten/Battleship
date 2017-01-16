@@ -6,6 +6,7 @@ require_relative 'timer.rb'
 require_relative 'translator.rb'
 require_relative 'player.rb'
 require_relative 'cli.rb'
+require 'pry'
 
 class Game
 include Message
@@ -112,11 +113,11 @@ include Translator
 	end
 
 	def update_HUD(input)
-		Translator.translate(input)
+		translate(input)
 		if player.hit
-			hud[Translator.pos_1][Translator.pos_2] = 'H'
+			hud[pos_1][pos_2] = 'H'
 		else
-			hud[Translator.pos_1][Translator.pos_2] = 'M'
+			hud[pos_1][pos_2] = 'M'
 		end
 	end
 

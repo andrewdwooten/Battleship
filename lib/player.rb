@@ -1,6 +1,7 @@
 require_relative 'board.rb'
 require_relative 'translator.rb'
 require_relative 'messages.rb'
+require 'pry'
 
 class Player
 	include Message
@@ -13,32 +14,33 @@ class Player
 	end
 
 	def place_ship_1(board, coordinates)
-		Translator.translate(coordinates)
-		pos_1 = Translator.pos_1
-		pos_2 = Translator.pos_2
-		pos_3 = Translator.pos_3
-		pos_4 = Translator.pos_4
-
-		if [pos_1, pos_2, pos_3, pos_4].include?(nil) == true
-				Message.invalid_placement
-			
-		elsif	 [pos_1 == pos_3 || pos_2 == pos_4] && 
-		 	 		 [pos_1 == (pos_3 + 1)] || [pos_2 == (pos_4 + 1)] && 
-		 	 		 [board[pos_1][pos_2]] == '0' && [board[pos_2][pos_4]] == '0'  
+		translate(coordinates)
+		if	check_row_and_column(pos_1, pos_2, pos_3, pos_4) && 
+		 	 	check_destroyer_continuity(pos_1, pos_2, pos_3, pos_4) && 
+		 	 	check_destroyer_path(board, pos_1, pos_2, pos_3, pos_4)  
 
 			 		 board[pos_1][pos_2] = 'd'
 			 		 board[pos_3][pos_4] = 'd'
 		else
-			Message.invalid_placement
+			puts Message.invalid_placement
 		end
 	end
 
+	def check_row_and_column(pos_1, pos_2, pos_3, pos_4)
+		pos_1 == pos_3 || pos_2 == pos_4
+	end 
+
+	def check_destroyer_continuity(pos_1, pos_2, pos_3, pos_4)
+		(pos_1 + 1) == pos_3 || (pos_2 + 1) == pos_4
+	end
+
+	def check_destroyer_path(board, pos_1, pos_2, pos_3, pos_4)
+		board[pos_1][pos_2] == '0' && board[pos_3][pos_4] == '0'
+	end
+
+
 	def place_ship_2(board, coordinates)
-		Translator.translate(coordinates)
-		pos_1 = Translator.pos_1
-		pos_2 = Translator.pos_2
-		pos_3 = Translator.pos_3
-		pos_4 = Translator.pos_4
+		translate(coordinates)
 
 		if [pos_1, pos_2, pos_3, pos_4].include?(nil) == true
 				Message.invalid_placement
@@ -62,9 +64,9 @@ class Player
 	  end
 
 	def shoot(board, input)
-		Translator.translate(input)
-		if board[Translator.pos_1][Translator.pos_2] != '0'
-			 	board[Translator.pos_1][Translator.pos_2] = '0'
+		translate(input)
+		if board[pos_1][pos_2] != '0'
+			 	board[pos_1][pos_2] = '0'
 			 	puts Message.hit
 				@hit = true
 		else
