@@ -45,9 +45,9 @@ class Player
 	def place_ship_2(board, input)
 		translate(input)
 		if check_coordinates? && check_submarine_placement?(board, pos_1, pos_2, pos_3, pos_4) 
-					board[pos_1][pos_2] = 's'
-					board[pos_3][pos_4] = 's'
-					middle_space(board, pos_1, pos_2, pos_3, pos_4)
+				board[pos_1][pos_2] = 's'
+				board[pos_3][pos_4] = 's'
+				middle_space(board, pos_1, pos_2, pos_3, pos_4)
 		end
 	end
 

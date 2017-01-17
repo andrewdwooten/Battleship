@@ -44,7 +44,7 @@ attr_reader 	:board,
 	end
 
 	def decision_tree(input)
-			case
+		case
 			when CLI.instructions?(input)
 				game_instructions
 			when CLI.play?(input)
@@ -53,7 +53,7 @@ attr_reader 	:board,
 				abort
 			when CLI.invalid?(input)
 				puts Message.invalid_command; startup
-			end
+		end
 	end
 
 	def game_instructions
