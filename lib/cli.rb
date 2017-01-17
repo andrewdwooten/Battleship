@@ -1,5 +1,3 @@
-require_relative 'messages.rb'
-
 module CLI
 
 	def self.play?(input)

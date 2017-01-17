@@ -73,15 +73,23 @@ attr_reader 	:board,
 	def place_ship_1
 		puts Message.place_ship_1
 		input = gets.chomp.upcase
+		check_ship_1(input)
+	end
+
+	def check_ship_1(input)
 		player.place_ship_1(player_board, input) == 'd' ?
-			player.place_ship_1(player_board, input) : place_ship_1
+		 player.place_ship_1(player_board, input) : ((puts Message.invalid_placement);place_ship_1)
 	end
 
 	def place_ship_2
 		puts Message.place_ship_2
 		input = gets.chomp.upcase
+		check_ship_2(input)
+	end
+
+	def check_ship_2(input)
 		player.place_ship_2(player_board, input) == 's' ?
-		player.place_ship_2(player_board, input) : place_ship_2
+			player.place_ship_2(player_board, input) :((puts Message.invalid_placement); place_ship_2)
 	end
 
 	def player_setup
