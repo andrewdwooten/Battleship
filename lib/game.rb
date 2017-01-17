@@ -20,7 +20,8 @@ attr_reader 	:board,
 							:timer,
 							:mac_board,
 							:player_board,
-							:shot_counter
+							:shot_counter,
+							:hud
 							
 
 	def initialize
@@ -32,10 +33,7 @@ attr_reader 	:board,
 		@mac_board = board.computer_board
 		@player_board = board.player_board
 		@shot_counter = 0
-	end
-
-	def hud
-		board.pretty
+		@hud = board.pretty
 	end
 
 	def startup
@@ -119,6 +117,7 @@ attr_reader 	:board,
 		player.hit ? (puts Message.hit) : (puts Message.miss)
 		update_HUD(input)
 	end
+
 	def turn
 		timer.start
 		until player.win?(mac_board) || mac.win?(player_board)
@@ -133,11 +132,7 @@ attr_reader 	:board,
 
 	def update_HUD(input)
 		translate(input)
-		if player.hit
-			hud[pos_1][pos_2] = 'H'
-		else
-			hud[pos_1][pos_2] = 'M'
-		end
+		player.hit ? hud[pos_1][pos_2] = 'H' : hud[pos_1][pos_2] = 'M'
 	end
 
 	def end_sequence
