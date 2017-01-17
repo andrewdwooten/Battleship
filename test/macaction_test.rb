@@ -2,9 +2,7 @@ require_relative 'test_helper.rb'
 require './lib/macaction.rb'
 require './lib/board.rb'
 require './lib/ship.rb'
-require './lib/messages.rb'
 require './lib/player.rb'
-require 'pry'
 
 class MacActionTest < MiniTest::Test
 attr_reader :board, :mac, :ship, :mac_board, :me

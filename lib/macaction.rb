@@ -3,8 +3,7 @@ require_relative 'messages.rb'
 
 class MacAction
 include Message
-	attr_reader :a, :b
-	attr_accessor :win
+	attr_accessor :win, :a, :b
 	
   def initialize
   end

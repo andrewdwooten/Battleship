@@ -6,7 +6,6 @@ require_relative 'timer.rb'
 require_relative 'translator.rb'
 require_relative 'player.rb'
 require_relative 'cli.rb'
-require 'pry'
 
 class Game
 include Message
@@ -111,10 +110,15 @@ attr_reader 	:board,
 
 	def player_turn
 		input = gets.chomp.upcase
-		player.shoot(mac_board, input)
-		player_turn_feedback(input)
+		check_shot?(input) ? (player.shoot(mac_board, input); player_turn_feedback(input)) :
+			((puts Message.invalid_shot); player_turn) 
 	end
 
+	def check_shot?(input)
+		translate(input)
+		pos_1 != nil && pos_2 != nil ? mac_board[pos_1][pos_2] != nil : false
+	end
+	
 	def player_turn_feedback(input)
 		player.hit ? (puts Message.hit) : (puts Message.miss)
 		update_HUD(input)

@@ -1,7 +1,6 @@
 require_relative 'board.rb'
 require_relative 'translator.rb'
 require_relative 'messages.rb'
-require 'pry'
 
 class Player
 	include Message
