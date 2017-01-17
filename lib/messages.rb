@@ -62,4 +62,13 @@ module Message
 	def self.win
 		"YOU'RE A WINNER!!  DOESN'T THAT FEEL GREAT?!\n \n"
 	end
+
+	def self.destroyer
+		"YOU SANK MY DESTROYER!! \n \n"
+	end
+
+	def self.submarine
+		"YOU SANK MY SUBMARINE!! \n \n"
+	end
+
 end 

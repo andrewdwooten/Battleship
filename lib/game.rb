@@ -33,7 +33,9 @@ attr_reader 	:board,
 		@mac_board = board.computer_board
 		@player_board = board.player_board
 		@shot_counter = 0
-		@hud = board.pretty
+		@hud = board.display
+		@subcount = 0
+		@destcount = 0
 	end
 
 	def startup
@@ -116,12 +118,28 @@ attr_reader 	:board,
 	def player_turn_feedback(input)
 		player.hit ? (puts Message.hit) : (puts Message.miss)
 		update_HUD(input)
+		check_destroyer
+		check_submarine
+	end
+
+	def check_destroyer
+		if !mac_board.flatten.include?("d") && @destcount == 0
+			puts Message.destroyer
+			@destcount += 1
+		end
+	end
+
+	def check_submarine
+		if !mac_board.flatten.include?("s") && @subcount == 0
+			puts Message.submarine
+			@subcount += 1
+		end
 	end
 
 	def turn
 		timer.start
 		until player.win?(mac_board) || mac.win?(player_board)
-			puts board.pretty
+			puts board.display
 			mac_turn
 			player_turn
 			@shot_counter += 1
