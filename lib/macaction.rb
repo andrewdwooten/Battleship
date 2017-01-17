@@ -56,7 +56,7 @@ include Message
 
 	def go_up(board, ship)
 		board[a + 1][b] = ship[1]
-		board[a + 2] = ship[2] if ship[2] != nil 
+		board[a + 2][b] = ship[2] if ship[2] != nil 
 	end
 
 	def go_down?(board)

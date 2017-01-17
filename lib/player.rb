@@ -13,9 +13,13 @@ class Player
 		@hit = false
 	end
 
+	def check_coordinates?
+		output.count == 4
+	end
+
 	def place_ship_1(board, coordinates)
 		translate(coordinates)
-		if	check_destroyer_placement?(board, pos_1, pos_2, pos_3, pos_4)
+		if	check_coordinates? && check_destroyer_placement?(board, pos_1, pos_2, pos_3, pos_4)
 			 		board[pos_1][pos_2] = 'd'
 			 		board[pos_3][pos_4] = 'd'
 		else
@@ -43,7 +47,7 @@ class Player
 
 	def place_ship_2(board, input)
 		translate(input)
-		if check_submarine_placement?(board, pos_1, pos_2, pos_3, pos_4) 
+		if check_coordinates? && check_submarine_placement?(board, pos_1, pos_2, pos_3, pos_4) 
 					board[pos_1][pos_2] = 's'
 					board[pos_3][pos_4] = 's'
 					middle_space(board, pos_1, pos_2, pos_3, pos_4)

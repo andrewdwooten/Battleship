@@ -6,6 +6,7 @@ require_relative 'timer.rb'
 require_relative 'translator.rb'
 require_relative 'player.rb'
 require_relative 'cli.rb'
+require 'pry'
 
 class Game
 include Message
@@ -40,7 +41,11 @@ attr_reader 	:board,
 	def startup
 		puts Message.start_game
 		input = gets.chomp
-		case
+		decision_tree(input)
+	end
+
+	def decision_tree(input)
+			case
 			when CLI.instructions?(input)
 				game_instructions
 			when CLI.play?(input)
@@ -49,18 +54,13 @@ attr_reader 	:board,
 				abort
 			when CLI.invalid?(input)
 				puts Message.invalid_command; startup
-			end		
+			end
 	end
 
 	def game_instructions
 		puts Message.instructions
 		input = gets.chomp.downcase
-		case
-			when CLI.quit?(input)
-				abort
-			when CLI.play?(input)
-				computer_setup
-		end
+		decision_tree(input)
 	end
 				
 	def computer_setup
@@ -73,13 +73,15 @@ attr_reader 	:board,
 	def place_ship_1
 		puts Message.place_ship_1
 		input = gets.chomp.upcase
-		player.place_ship_1(player_board, input)
+		player.place_ship_1(player_board, input) == 'd' ?
+			player.place_ship_1(player_board, input) : place_ship_1
 	end
 
 	def place_ship_2
 		puts Message.place_ship_2
 		input = gets.chomp.upcase
-		player.place_ship_2(player_board, input)
+		player.place_ship_2(player_board, input) == 's' ?
+		player.place_ship_2(player_board, input) : place_ship_2
 	end
 
 	def player_setup
