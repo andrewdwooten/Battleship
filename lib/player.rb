@@ -12,74 +12,104 @@ class Player
 		@hit = false
 	end
 
+	def check_coordinates?
+		output.count == 4
+	end
+
 	def place_ship_1(board, coordinates)
-		Translator.translate(coordinates)
-		pos_1 = Translator.pos_1
-		pos_2 = Translator.pos_2
-		pos_3 = Translator.pos_3
-		pos_4 = Translator.pos_4
-
-		if [pos_1, pos_2, pos_3, pos_4].include?(nil) == true
-				Message.invalid_placement
-			
-		elsif	 [pos_1 == pos_3 || pos_2 == pos_4] && 
-		 	 		 [pos_1 == (pos_3 + 1)] || [pos_2 == (pos_4 + 1)] && 
-		 	 		 [board[pos_1][pos_2]] == '0' && [board[pos_2][pos_4]] == '0'  
-
-			 		 board[pos_1][pos_2] = 'd'
-			 		 board[pos_3][pos_4] = 'd'
-		else
-			Message.invalid_placement
+		translate(coordinates)
+		if	check_coordinates? && check_destroyer_placement?(board, pos_1, pos_2, pos_3, pos_4)
+			 		board[pos_1][pos_2] = 'd'
+			 		board[pos_3][pos_4] = 'd'
 		end
 	end
 
-	def place_ship_2(board, coordinates)
-		Translator.translate(coordinates)
-		pos_1 = Translator.pos_1
-		pos_2 = Translator.pos_2
-		pos_3 = Translator.pos_3
-		pos_4 = Translator.pos_4
+	def check_row_and_column?(pos_1, pos_2, pos_3, pos_4)
+		pos_1 == pos_3 || pos_2 == pos_4
+	end 
 
-		if [pos_1, pos_2, pos_3, pos_4].include?(nil) == true
-				Message.invalid_placement
-			
-		elsif [pos_1 == pos_3 || pos_2 == pos_4] &&
-				  [pos_1 == (pos_3 + 1) || pos_2 == (pos_4 + 1)] &&
-					[board[pos_1][pos_2] == '0' && board[pos_2][pos_4]== '0'] &&  
-			
+	def check_destroyer_continuity?(pos_1, pos_2, pos_3, pos_4)
+		(pos_1 + 1) == pos_3 || (pos_2 + 1) == pos_4
+	end
+
+	def check_destroyer_path?(board, pos_1, pos_2, pos_3, pos_4)
+		board[pos_1][pos_2] == '0' && board[pos_3][pos_4] == '0'
+	end
+
+	def check_destroyer_placement?(board, pos_1, pos_2, pos_3, pos_4)
+		check_row_and_column?(pos_1, pos_2, pos_3, pos_4) && 
+		check_destroyer_continuity?(pos_1, pos_2, pos_3, pos_4) && 
+		check_destroyer_path?(board, pos_1, pos_2, pos_3, pos_4)
+	end
+
+	def place_ship_2(board, input)
+		translate(input)
+		if check_coordinates? && check_submarine_placement?(board, pos_1, pos_2, pos_3, pos_4) 
 					board[pos_1][pos_2] = 's'
 					board[pos_3][pos_4] = 's'
-
-					if [pos_1 = pos_3] && board[pos_1][pos_2 + 1] == '0'
-				 		 board[pos_1][pos_2 + 1] = 's'
-					else
-				 	board[pos_1 + 1][pos_3] = 's'
-					end
-				
-		else
-			Message.invalid_placement
+					middle_space(board, pos_1, pos_2, pos_3, pos_4)
 		end
-	  end
+	end
+
+	def middle_space(board, pos_1, pos_2, pos_3, pos_4)
+		case
+			when (pos_1 + 2) == pos_3
+				board[pos_1 + 1][pos_2] = 's'
+			when (pos_2 + 2) == pos_4
+				board[pos_1][pos_2 + 1] = 's'
+			end
+	end
+
+	def check_submarine_continuity?(pos_1, pos_2, pos_3, pos_4)
+		(pos_1 + 2) == pos_3 || (pos_2 + 2 ) == pos_4
+	end
+
+	def check_beginning_end?(board, pos_1, pos_2, pos_3, pos_4)
+		board[pos_1][pos_2] == '0' && board[pos_3][pos_4] == '0'
+	end
+
+	def check_submarine_path?(board, pos_1, pos_2, pos_3, pos_4)
+		case
+			when (pos_1 + 2) == pos_3
+				board[pos_1 + 1][pos_2] == '0'
+			when (pos_2 + 2) == pos_4
+				board[pos_1][pos_2 + 1] == '0'
+		end
+	end
+
+	def check_submarine_placement?(board, pos_1, pos_2, pos_3, pos_4)
+		check_row_and_column?(pos_1, pos_2, pos_3, pos_4) &&
+		check_beginning_end?(board, pos_1, pos_2, pos_3, pos_4) &&
+		check_submarine_continuity?(pos_1, pos_2, pos_3, pos_4) &&
+		check_submarine_path?(board, pos_1, pos_2, pos_3, pos_4)
+	end
 
 	def shoot(board, input)
-		Translator.translate(input)
-		if board[Translator.pos_1][Translator.pos_2] != '0'
-			 	board[Translator.pos_1][Translator.pos_2] = '0'
-			 	puts Message.hit
-				@hit = true
-		else
-			 puts Message.miss
-			 @hit = false
-		end
+		translate(input)
+		check_hit?(board,pos_1,pos_2) ? bang(board, pos_1, pos_2) : miss
+	end
+
+	def check_hit?(board,pos_1,pos_2)
+		board[pos_1][pos_2] != '0'
+	end
+
+	def bang(board,pos_1,pos_2)
+		board[pos_1][pos_2] = '0'
+		@hit = true
+	end
+			
+	def miss
+		@hit = false
 	end
 
 	def win?(board)
-		if board.flatten.include?("d") || board.flatten.include?("s")
-			@win = false
-		else
-			@win = true
-		end
+		check_board?(board) ? (@win=false) : (@win=true)
 	end
+
+	def check_board?(board)
+	 board.flatten.include?("d") || board.flatten.include?("s")
+	end
+
 end 
 
 			

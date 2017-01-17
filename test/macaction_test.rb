@@ -2,10 +2,10 @@ require_relative 'test_helper.rb'
 require './lib/macaction.rb'
 require './lib/board.rb'
 require './lib/ship.rb'
-require './lib/messages.rb'
+require './lib/player.rb'
 
 class MacActionTest < MiniTest::Test
-attr_reader :board, :mac, :ship, :mac_board
+attr_reader :board, :mac, :ship, :mac_board, :me
 include Message
 
 def setup
@@ -13,6 +13,7 @@ def setup
 	@mac = MacAction.new
 	@ship = Ship.new
   @mac_board = board.computer_board
+  @me = Player.new
 end
 
 	def test_place_ships_changes_computer_board
@@ -52,5 +53,13 @@ end
     mac.place_ships(mac_board, ship.submarine)
     mac.place_ships(mac_board, ship.destroyer)
     refute mac.win?(mac_board)
+  end
+
+  def test_choose_spot_alters_a_and_b_values
+    a = mac.a
+    b = mac.b
+    mac.choose_spot
+    refute mac.a == a
+    refute mac.b == b
   end
 end

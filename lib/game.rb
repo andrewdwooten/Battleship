@@ -12,15 +12,15 @@ include Message
 include CLI
 include Translator
 
-	attr_reader 	:board,
-								:player,
-								:ship,
-								:mac,
-								:timer,
-								:mac_board,
-								:player_board,
-							  :HUD,
-								:shot_counter
+attr_reader 	:board,
+							:player,
+							:ship,
+							:mac,
+							:timer,
+							:mac_board,
+							:player_board,
+							:shot_counter,
+							:hud
 							
 
 	def initialize
@@ -31,80 +31,144 @@ include Translator
 		@timer = Timer.new
 		@mac_board = board.computer_board
 		@player_board = board.player_board
-		@HUD = board.pretty
 		@shot_counter = 0
+		@hud = board.display
+		@subcount = 0
+		@destcount = 0
 	end
 
 	def startup
 		puts Message.start_game
-			@input = gets.chomp
-			case
-				when CLI.instructions?(@input)
-					puts Message.instructions
-						@input = gets.chomp
-							case
-							when CLI.quit?(@input)
-								abort
-							when CLI.play?(@input)
-								self.computer_setup
-							end
-				when CLI.play?(@input)
-					self.computer_setup
-				when CLI.quit?(@input)
-					abort
-				end		
+		input = gets.chomp
+		decision_tree(input)
 	end
 
+	def decision_tree(input)
+			case
+			when CLI.instructions?(input)
+				game_instructions
+			when CLI.play?(input)
+				computer_setup
+			when CLI.quit?(input)
+				abort
+			when CLI.invalid?(input)
+				puts Message.invalid_command; startup
+			end
+	end
+
+	def game_instructions
+		puts Message.instructions
+		input = gets.chomp.downcase
+		decision_tree(input)
+	end
+				
 	def computer_setup
 		mac.place_ships(mac_board,ship.destroyer)
 		mac.place_ships(mac_board,ship.submarine)
 		puts Message.computer_finished_placement
-		self.setup
+		player_setup
 	end
 
-
-	def setup
+	def place_ship_1
 		puts Message.place_ship_1
-		pos_1 = gets.chomp
-		player.place_ship_1(player_board, pos_1)
+		input = gets.chomp.upcase
+		check_ship_1(input)
+	end
+
+	def check_ship_1(input)
+		player.place_ship_1(player_board, input) == 'd' ?
+		 player.place_ship_1(player_board, input) : ((puts Message.invalid_placement);place_ship_1)
+	end
+
+	def place_ship_2
 		puts Message.place_ship_2
-		pos_2 = gets.chomp
-		player.place_ship_2(player_board, pos_2)
-		self.turn
+		input = gets.chomp.upcase
+		check_ship_2(input)
+	end
+
+	def check_ship_2(input)
+		player.place_ship_2(player_board, input) == 's' ?
+			player.place_ship_2(player_board, input) : ((puts Message.invalid_placement); place_ship_2)
+	end
+
+	def player_setup
+		place_ship_1
+		place_ship_2
+		turn
+	end
+
+	def mac_turn
+		mac.shoot(player_board)
+		mac_turn_feedback
+	end
+
+	def mac_turn_feedback
+	 mac.check_hit?(player_board) ? (puts Message.computer_hit) :
+	 	(puts Message.computer_miss)
+	 puts Message.shot_prompt
+	end
+
+	def player_turn
+		input = gets.chomp.upcase
+		check_shot?(input) ? (player.shoot(mac_board, input); player_turn_feedback(input)) :
+			((puts Message.invalid_shot); player_turn) 
+	end
+
+	def check_shot?(input)
+		translate(input)
+		pos_1 != nil && pos_2 != nil ? mac_board[pos_1][pos_2] != nil : false
+	end
+	
+	def player_turn_feedback(input)
+		player.hit ? (puts Message.hit) : (puts Message.miss)
+		update_HUD(input)
+		check_destroyer
+		check_submarine
+	end
+
+	def check_destroyer
+		if !mac_board.flatten.include?("d") && @destcount == 0
+			puts Message.destroyer
+			@destcount += 1
+		end
+	end
+
+	def check_submarine
+		if !mac_board.flatten.include?("s") && @subcount == 0
+			puts Message.submarine
+			@subcount += 1
+		end
 	end
 
 	def turn
 		timer.start
-		until player.win?(mac_board) == true || mac.win?(player_board) == true
-			puts board.pretty
-			mac.shoot(player_board)
-			puts Message.shot_prompt
-			@input = gets.chomp
-			player.shoot(mac_board, @input)
-			self.update_HUD(@input)
+		until player.win?(mac_board) || mac.win?(player_board)
+			puts board.display
+			mac_turn
+			player_turn
 			@shot_counter += 1
 		 end
 		 timer.stop
-		 self.end_sequence
+		 end_sequence
 	end
 
 	def update_HUD(input)
-		Translator.translate(input)
-		if player.hit
-			@HUD[Translator.pos_1][Translator.pos_2] = 'H'
-		else
-			@HUD[Translator.pos_1][Translator.pos_2] = 'M'
-		end
+		translate(input)
+		player.hit ? hud[pos_1][pos_2] = 'H' : hud[pos_1][pos_2] = 'M'
 	end
 
 	def end_sequence
-		if mac.win?(player_board)
-			puts Message.lose
-		else
-			puts Message.win
-		end
+		mac.win?(player_board) ? (puts Message.lose) : (puts Message.win)
+		shot_report
+		time_lapse
+	end
+
+	def shot_report
+		puts "You fired #{shot_counter} shots!"
+	end
+
+	def time_lapse
 		puts "You played this long: #{@timer.elapsed} seconds"
-		puts "You fired #{@shot_counter} shots!"
 	end
 end 
 
