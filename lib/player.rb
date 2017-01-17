@@ -96,12 +96,10 @@ class Player
 
 	def bang(board,pos_1,pos_2)
 		board[pos_1][pos_2] = '0'
-		puts Message.hit
 		@hit = true
 	end
 			
 	def miss
-		puts Message.miss
 		@hit = false
 	end
 

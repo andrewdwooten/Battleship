@@ -89,7 +89,7 @@ attr_reader 	:board,
 
 	def check_ship_2(input)
 		player.place_ship_2(player_board, input) == 's' ?
-			player.place_ship_2(player_board, input) :((puts Message.invalid_placement); place_ship_2)
+			player.place_ship_2(player_board, input) : ((puts Message.invalid_placement); place_ship_2)
 	end
 
 	def player_setup
@@ -100,15 +100,25 @@ attr_reader 	:board,
 
 	def mac_turn
 		mac.shoot(player_board)
-		puts Message.shot_prompt
+		mac_turn_feedback
+	end
+
+	def mac_turn_feedback
+	 mac.check_hit?(player_board) ? (puts Message.computer_hit) :
+	 	(puts Message.computer_miss)
+	 puts Message.shot_prompt
 	end
 
 	def player_turn
 		input = gets.chomp.upcase
 		player.shoot(mac_board, input)
-		update_HUD(input)
+		player_turn_feedback(input)
 	end
 
+	def player_turn_feedback(input)
+		player.hit ? (puts Message.hit) : (puts Message.miss)
+		update_HUD(input)
+	end
 	def turn
 		timer.start
 		until player.win?(mac_board) || mac.win?(player_board)

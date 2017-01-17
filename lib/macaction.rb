@@ -70,7 +70,7 @@ include Message
 
 	def shoot(board)
 		choose_spot
-		check_hit?(board) ? bang(board) : miss
+		bang(board) if check_hit?(board)
 	end
 
 	def check_hit?(board)
@@ -79,11 +79,6 @@ include Message
 
 	def bang(board)
 		board[a][b] = '0'
-		puts Message.computer_hit
-	end
-
-	def miss
-		puts Message.computer_miss
 	end
 
 	def win?(board)
