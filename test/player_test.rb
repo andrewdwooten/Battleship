@@ -161,7 +161,5 @@ end
 			me.win?(mac_board)
 			assert me.win
 		end
-
-
-
+		
 end

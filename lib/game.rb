@@ -170,6 +170,7 @@ attr_reader 	:board,
 	def time_lapse
 		puts "You played this long: #{@timer.elapsed} seconds"
 	end
+	
 end 
 
 a = Game.new

@@ -9,5 +9,6 @@ class TimerTest < MiniTest::Test
 		stopwatch.stop
 		assert_equal stopwatch.end_time - stopwatch.start, stopwatch.elapsed
 	end
+	
 end
 

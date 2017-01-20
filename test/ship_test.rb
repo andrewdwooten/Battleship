@@ -36,5 +36,6 @@ attr_reader :ship, :destroyer, :submarine
   def test_each_submarine_element_is_string_s
     assert 3, submarine.bsearch {|e| e == 's'}
   end
+  
 end
 

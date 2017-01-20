@@ -70,5 +70,5 @@ module Message
 	def self.submarine
 		"YOU SANK MY SUBMARINE!! \n \n"
 	end
-
+	
 end 

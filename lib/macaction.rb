@@ -26,6 +26,9 @@ include Message
 						 go_up(board, ship)
 				when go_down?(board)
 						 go_down(board,ship)
+				else 
+						board[a][b] ='0'
+						place_ships(board,ship)
 				end
 		else
 		end

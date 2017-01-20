@@ -15,7 +15,7 @@ module CLI
 	def self.invalid?(input)
 		input != 'p' && input != 'q' && input != 'i'
 	end
-		
+	
 end
 
 	

@@ -32,4 +32,5 @@ attr_reader :board
 		refute board.player_board.eql?(board.display_board)
 		refute board.computer_board.eql?(board.display_board)
 	end
+	
 end
