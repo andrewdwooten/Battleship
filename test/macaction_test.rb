@@ -62,4 +62,5 @@ end
     refute mac.a == a
     refute mac.b == b
   end
+  
 end

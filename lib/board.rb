@@ -30,5 +30,5 @@ attr_accessor :player_board,
 	def subheading
 		puts '==================='
 	end	
-
+	
 end

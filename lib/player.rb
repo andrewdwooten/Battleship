@@ -109,7 +109,7 @@ class Player
 	def check_board?(board)
 	 board.flatten.include?("d") || board.flatten.include?("s")
 	end
-
+	
 end 
 
 			
